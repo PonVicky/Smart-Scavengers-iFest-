@@ -1,0 +1,56 @@
+int val;
+int tempPin = 1;
+const int LED = 2; 
+const int DO = 8; 
+void setup()
+{
+  Serial.begin(9600);
+  Serial.begin(9600); 
+  pinMode(LED, OUTPUT); 
+  pinMode(DO, INPUT); 
+}
+void loop()
+{
+  val = analogRead(tempPin);
+  float mv = ( val/1024.0)*5000;
+  float cel = mv/10;
+  float farh = (cel*9)/5 + 32;
+  Serial.print("TEMPRATURE IN CELSIUS = ");
+  Serial.print(cel);
+  Serial.print("*C");
+  Serial.println();
+  delay(1000);
+  Serial.print("TEMPRATURE IN FARENHEITE = ");
+  Serial.print(farh);
+  Serial.print("*F");
+  Serial.println();
+  delay(3000);
+  int alarm = 0; 
+  float sensor_volt; 
+  float RS_gas; 
+  float ratio; 
+  float R0 = 0.91; 
+ 
+  int sensorValue = analogRead(A0); 
+  sensor_volt = ((float)sensorValue / 1024) * 5.0; 
+ RS_gas = (5.0 - sensor_volt) / sensor_volt; // Depend on RL on yor module 
+ 
+ 
+  ratio = RS_gas / R0; // ratio = RS/R0 
+ 
+  Serial.print("Ratio of Combustible Gas ="); 
+  Serial.println(sensor_volt); 
+  Serial.print("Ratio of Normal Room Temp ="); 
+  Serial.println(RS_gas); 
+  Serial.print("Ratio of Both = "); 
+  Serial.println(ratio); 
+  Serial.print("\n\n"); 
+ 
+  alarm = digitalRead(DO); 
+  if (alarm=1) digitalWrite(LED, HIGH); 
+ else if (alarm=0) digitalWrite(LED, LOW); 
+  if (ratio<1) Serial.print("Danger\n");
+  else if (ratio>1) Serial.print("Safe To Breathe\n");
+  
+  delay(3000);
+  } 
